@@ -2,6 +2,7 @@ using AnomalyDetector.Model;
 using AnomalyDetector.Options;
 using AnomalyDetector.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<VariableStoreContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<IModelStorage, AzureStorage>();
 builder.Services.AddScoped<IAnomalyDetector, AzureAnomalyDetector>();
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Anomaly detector api", Version = "v1" }));
 
 
 var app = builder.Build();
@@ -31,11 +33,18 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Anomaly detector api");
+    c.RoutePrefix = string.Empty;
+});
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapRazorPages();
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.Run();
