@@ -66,7 +66,7 @@ namespace AnomalyDetector.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok("Data received, no trained model detected. You need at least 30 values to train a model.");
         }
 
         [HttpPost("[action]/{deviceName}")]
@@ -130,7 +130,7 @@ namespace AnomalyDetector.Controllers
             var modelLocation = await _storage.CreateModelFromEntries(device.Id);
             var success = _anomalyDetector.TrainModel(device.Id, modelLocation);
 
-            return Ok($"Created csv file in {modelLocation}, trained: {success}");
+            return Ok($"Created csv file in {modelLocation}, trained: {success}. (remember, 30 Entries are necessary to train a model)!");
         }
 
 
