@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace AnomalyDetector.Model;
 
@@ -20,10 +21,6 @@ public partial class VariableStoreContext : DbContext
     public virtual DbSet<RecordItem> RecordItems { get; set; }
 
     public virtual DbSet<TrainedModel> TrainedModels { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:sql-variable-store.database.windows.net,1433;Initial Catalog=variableStore;Persist Security Info=False;User ID=rooty;Password=AZnr6BZBHvUb88sX5yEu;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
