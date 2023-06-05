@@ -2,6 +2,7 @@
 using AnomalyDetector.Options;
 using Azure;
 using Azure.AI.AnomalyDetector;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace AnomalyDetector.Services
@@ -19,6 +20,18 @@ namespace AnomalyDetector.Services
             _context = context;
             _options = options.Value;
             _client = new AnomalyDetectorClient(new Uri(_options.EndpointUri), new AzureKeyCredential(_options.Credentials));
+        }
+
+        public bool DeleteModel(int deviceId)
+        {
+            var model = _context.TrainedModels.FirstOrDefault(e => e.DeviceId == deviceId);
+            if (model != null)
+            {
+                _context.TrainedModels.Where(e => e.DeviceId == deviceId).ExecuteDelete();
+                _client.DeleteMultivariateModel(model.Id.ToString());
+            }
+            
+            return model != null;
         }
 
         public bool DoesModelExist(int deviceId)

@@ -8,5 +8,7 @@ namespace AnomalyDetector.Services
         bool DoesModelExist(int deviceId);
         IEnumerable<AnomalyState> GetAnomalies(int deviceId);
         bool TrainModel(int deviceId, string modelFileLocation);
+
+        bool DeleteModel(int deviceId);
     }
 }

@@ -162,5 +162,17 @@ namespace AnomalyDetector.Controllers
 
             return csvData;
         }
+
+        [HttpPost("[action]/{deviceName}")]
+        public ActionResult DeleteTrainedModel(string deviceName)
+        {
+            var device = _context.Devices.FirstOrDefault(e => e.Name == deviceName);
+            if (device == null)
+            {
+                return NotFound();
+            }
+            _anomalyDetector.DeleteModel(device.Id);
+            return Ok();
+        }
     }
 }
